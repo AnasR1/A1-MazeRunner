@@ -16,6 +16,7 @@ public class Main {
         //Apache CLI Parsing
         Options options = new Options();
         options.addOption("i", true, "input the maze file");
+        options.addOption("p", true, "taking input file and path string");
 
         CommandLineParser parser = new DefaultParser();
         String maze_file = null;
