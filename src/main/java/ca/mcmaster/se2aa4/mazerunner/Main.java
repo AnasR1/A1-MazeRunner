@@ -35,8 +35,8 @@ public class Main {
 
         logger.info("** Starting Maze Runner");
         try {
-            logger.info("**** Reading the maze from file " + args[0]);
-            BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+            logger.info("**** Reading the maze from file " + maze_file);
+            BufferedReader reader = new BufferedReader(new FileReader(maze_file));
             String line;
             while ((line = reader.readLine()) != null) {
                 for (int idx = 0; idx < line.length(); idx++) {
@@ -49,10 +49,15 @@ public class Main {
                 System.out.print(System.lineSeparator());
             }
         } catch(Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.error("Error Reading File");
         }
         logger.info("**** Computing path");
-        logger.warn("PATH NOT COMPUTED");
-        logger.info("** End of MazeRunner");
+        try {
+            //Try the pathing algorithm
+        }
+        catch (Exception e){
+            logger.warn("PATH NOT COMPUTED");
+            logger.info("** End of MazeRunner");
+        }
     }
 }
