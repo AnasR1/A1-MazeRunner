@@ -3,6 +3,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
@@ -34,26 +36,25 @@ public class Main {
         }
 
         logger.info("** Starting Maze Runner");
+        List<String> maze = new ArrayList<String>();
         try {
             logger.info("**** Reading the maze from file " + maze_file);
             BufferedReader reader = new BufferedReader(new FileReader(maze_file));
             String line;
             while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
-                    }
-                }
-                System.out.print(System.lineSeparator());
+                maze.add(line);
             }
         } catch(Exception e) {
             logger.error("Error Reading File");
         }
+
+        for (String line:maze) {
+            logger.info(line);
+        }
         logger.info("**** Computing path");
         try {
-            //Try the pathing algorithm
+            //Try the pathing algorithm from player class
+
         }
         catch (Exception e){
             logger.warn("PATH NOT COMPUTED");
