@@ -9,12 +9,18 @@ abstract class Game {
         this.maze = maze;
     }
 
+    abstract void extendBoard(String line);
     abstract int[] findEntrance();
     abstract int[] findExit();
 }
 public class MazeBoard extends Game {
     public MazeBoard(List<String> maze) {
         super(maze);
+    }
+
+    @Override
+    void extendBoard(String line) {
+        maze.add(line);
     }
 
     @Override

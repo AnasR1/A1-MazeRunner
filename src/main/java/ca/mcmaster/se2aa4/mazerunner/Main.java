@@ -3,6 +3,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +38,13 @@ public class Main {
 
         logger.info("** Starting Maze Runner");
         List<String> maze = new ArrayList<String>();
+        MazeBoard mazeBoard = new MazeBoard(maze);
         try {
             logger.info("**** Reading the maze from file " + maze_file);
             BufferedReader reader = new BufferedReader(new FileReader(maze_file));
             String line;
             while ((line = reader.readLine()) != null) {
-                maze.add(line);
+                mazeBoard.extendBoard(line);
             }
         } catch(Exception e) {
             logger.error("Error Reading File");
@@ -52,9 +54,23 @@ public class Main {
             logger.info(line);
         }
         logger.info("**** Computing path");
+        int[] entrance = mazeBoard.findEntrance();
+        int[] exit = mazeBoard.findExit();
+        if (entrance[0] == -1 || exit[0] == -1) {
+            logger.error("Entrance or exit not found in the maze.");
+            System.exit(1);
+        }
+        logger.info("Entrance found at: Row " + entrance[0] + ", Column " + entrance[1]);
+        logger.info("Exit found at: Row " + exit[0] + ", Column " + exit[1]);
+
+
         try {
             //Try the pathing algorithm from player class
-
+            List<String> path = new ArrayList<>();
+            logger.info("Path instructions:");
+            for (String instruction : path) {
+                System.out.println(instruction);
+            }
         }
         catch (Exception e){
             logger.warn("PATH NOT COMPUTED");
