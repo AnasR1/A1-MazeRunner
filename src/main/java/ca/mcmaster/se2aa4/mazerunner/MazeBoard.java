@@ -44,7 +44,7 @@ public class MazeBoard extends Game {
 
     @Override
     int[] findExit() {
-        int lastCol = maze.get(0).length() - 1;
+        int lastCol = maze.getFirst().length() - 1;
 
         for (int row = 1; row < maze.size() - 1; row++) {
             if (maze.get(row).charAt(lastCol) == ' ') {
@@ -52,54 +52,5 @@ public class MazeBoard extends Game {
             }
         }
         return new int[]{-1, -1};
-    }
-
-    public String findPath(int[] entrance, int[] exit) {
-        StringBuilder path = new StringBuilder();
-        int row = entrance[0];
-        int col = entrance[1];
-        int direction = 1;
-        List<String> instructions = new ArrayList<>();
-
-        while (row != exit[0] || col != exit[1]) {
-            boolean moved = false;
-
-            for (int i = -1; i <= 1; i++) {
-                int newDirection = (direction + i + 4) % 4;
-                int newRow = row + DIRECTIONS[newDirection][0];
-                int newCol = col + DIRECTIONS[newDirection][1];
-
-                if (canMove(newRow, newCol)) {
-                    if (i == -1) {
-                        instructions.add("L");
-                    } else if (i == 1) {
-                        instructions.add("R");
-                    }
-                    instructions.add("F");
-
-                    row = newRow;
-                    col = newCol;
-                    direction = newDirection;
-                    moved = true;
-
-                    break;
-                }
-            }
-
-            if (!moved) {
-                return "NO PATH FOUND";
-            }
-        }
-
-        for (String instruction : instructions) {
-            path.append(instruction);
-        }
-        return path.toString();
-    }
-
-    private boolean canMove(int row, int col) {
-        return row >= 0 && row < maze.size() &&
-                col >= 0 && col < maze.get(0).length() &&
-                maze.get(row).charAt(col) == ' ';
     }
 }

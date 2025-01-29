@@ -2,9 +2,13 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class Player {
+public class PathFinder {
     StringBuilder path = new StringBuilder();
+    private static final Logger logger = LogManager.getLogger();
+
     private static int[][] DIRECTIONS = {
             {-1, 0}, // North
             {0, 1},  // East
@@ -13,11 +17,11 @@ public class Player {
     };
     private MazeBoard mazeBoard; // Reference to the MazeBoard object
 
-    public Player(MazeBoard mazeBoard) {
+    public PathFinder(MazeBoard mazeBoard) {
         this.mazeBoard = mazeBoard;
     }
 
-    protected String PathFinder(int[] entrance, int[] exit){
+    protected String Pathfinder(int[] entrance, int[] exit){
         int row = entrance[0];
         int col = exit[1];
         int direction = 1;
@@ -28,8 +32,9 @@ public class Player {
                 int newDirection = (direction + i + 4) % 4;
                 int newRow = row + DIRECTIONS[newDirection][0];
                 int newCol = col + DIRECTIONS[newDirection][1];
-
+                logger.info(newDirection + " " + newRow + " " + newCol);
                 if (canMove(newRow, newCol)) {
+                    logger.info(canMove(newRow, newCol));
                     if (i == -1) {
                         instructions.add("L");
                     }
@@ -40,6 +45,7 @@ public class Player {
                     row = newRow;
                     col = newCol;
                     direction = newDirection;
+                    logger.info(instructions);
                     break;
                 }
             }
@@ -52,6 +58,7 @@ public class Player {
         return path.toString();
     }
     private boolean canMove(int row, int col) {
-        return row >= 0 && row < mazeBoard.maze.size() && col >= 0 && col < mazeBoard.maze.get(0).length() && mazeBoard.maze.get(row).charAt(col) == ' ';
+        logger.info(row + " " + col + " " + mazeBoard.maze.get(row).charAt(col));
+        return row >= 0 && row < mazeBoard.maze.size() && col >= 0 && col < mazeBoard.maze.getFirst().length() && mazeBoard.maze.get(row).charAt(col) == ' ';
     }
 }

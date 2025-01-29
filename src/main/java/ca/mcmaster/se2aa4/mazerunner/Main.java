@@ -2,6 +2,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Main {
         // Apache CLI Parsing
         Options options = new Options();
         options.addOption("i", true, "input the maze file");
+        options.addOption("p", true, "input the maze file and path");
 
         CommandLineParser parser = new DefaultParser();
         String mazeFile = null;
@@ -25,7 +28,12 @@ public class Main {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("i")) {
-                mazeFile = cmd.getOptionValue("i");
+                if (cmd.hasOption("p")){
+                    String path = cmd.getOptionValue("p");
+                }
+                else{
+                    mazeFile = cmd.getOptionValue("i");
+                }
             } else {
                 logger.error("No -i flag detected");
                 System.exit(1);
@@ -46,7 +54,7 @@ public class Main {
                 mazeBoard.extendBoard(line);
             }
         } catch (Exception e) {
-            logger.error("Error reading file: " + e.getMessage());
+            logger.error("Error reading file: ");
             System.exit(1);
         }
 
@@ -67,7 +75,10 @@ public class Main {
         logger.info("Entrance found at: Row " + entrance[0] + ", Column " + entrance[1]);
         logger.info("Exit found at: Row " + exit[0] + ", Column " + exit[1]);
 
-        String path = mazeBoard.findPath(entrance, exit);
+        PathFinder pathFinder = new PathFinder(mazeBoard);
+
+        String path = pathFinder.Pathfinder(entrance, exit);
+
         logger.info("Path instructions: " + path);
 
         logger.info("** End of MazeRunner");
