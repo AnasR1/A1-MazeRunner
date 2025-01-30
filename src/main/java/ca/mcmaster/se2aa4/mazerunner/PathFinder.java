@@ -58,7 +58,9 @@ public class PathFinder {
         return path.toString();
     }
     private boolean canMove(int row, int col) {
-        logger.info(row + " " + col + " " + mazeBoard.maze.get(row).charAt(col));
-        return row >= 0 && row < mazeBoard.maze.size() && col >= 0 && col < mazeBoard.maze.getFirst().length() && mazeBoard.maze.get(row).charAt(col) == ' ';
+        if(row < 0 || row >= mazeBoard.maze.size() || col < 0 || col >= mazeBoard.maze.get(row).length()){
+            return false;
+        }
+        return (mazeBoard.maze.get(row).charAt(col) == ' ' || mazeBoard.maze.get(row).charAt(col) == '\0');
     }
 }
