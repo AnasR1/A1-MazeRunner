@@ -28,7 +28,7 @@ public class PathFinder {
         int direction = 1; // Start facing East (right)
         List<String> instructions = new ArrayList<>();
 
-        logger.info("Executing path finder using the right-hand rule");
+        logger.info("Executing path finder");
         logger.info("Entrance: Row " + currRow + " Col " + currCol);
         logger.info("Exit: Row " + exit[0] + " Col " + exit[1]);
 
@@ -71,7 +71,7 @@ public class PathFinder {
                 currCol = backCol;
                 direction = backDir;
             } else {
-                logger.warn("No valid move found, breaking loop");
+                logger.warn("No valid move found");
                 break;
             }
             logger.info("Current Position: Row " + currRow + " Col " + currCol);
@@ -88,5 +88,23 @@ public class PathFinder {
             return false;
         }
         return (mazeBoard.maze.get(row).charAt(col) == ' ' || mazeBoard.maze.get(row).isEmpty());
+    }
+
+    protected String factoredFormPath(String path){
+        StringBuilder factored_path = new StringBuilder();
+        int counter = 0;
+        char curr_letter = path.charAt(0);
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == curr_letter) {
+                counter++;
+            }
+            else{
+                factored_path.append(counter).append(path.charAt(i-1));
+                counter = 1;
+                curr_letter = path.charAt(i);
+            }
+        }
+        factored_path.append(counter).append(path.charAt(path.length()-1));
+        return factored_path.toString();
     }
 }

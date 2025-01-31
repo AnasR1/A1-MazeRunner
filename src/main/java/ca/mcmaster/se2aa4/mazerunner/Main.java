@@ -78,8 +78,9 @@ public class Main {
         PathFinder pathFinder = new PathFinder(mazeBoard);
 
         String path = pathFinder.Pathfinder(entrance, exit);
-
-        logger.info("Path instructions: " + path);
+        String factoredPath = pathFinder.factoredFormPath(path);
+        logger.info("Path: " + path);
+        logger.info("Factored Form Path: " + factoredPath);
 
         logger.info("** End of MazeRunner");
     }
