@@ -42,9 +42,8 @@ public class MazeBoard extends Game {
 
         for (int row = 1; row < maze.size() - 1; row++) {
             if (maze.get(row).isEmpty() || maze.get(row).length() < 1) {
-                continue;
+                return new int[]{row, 0};
             }
-            logger.info(row);
             if (maze.get(row).charAt(0) == ' ' || maze.get(row).charAt(0) == '\0') {
                 return new int[]{row, 0};
             }
@@ -58,9 +57,8 @@ public class MazeBoard extends Game {
 
         for (int row = 1; row < maze.size() - 1; row++) {
             if (maze.get(row).isEmpty() || maze.get(row).length() < 1) {
-                continue;
+                return new int[]{row, lastCol};
             }
-            logger.info(row);
             if (maze.get(row).charAt(lastCol) == ' ' || maze.get(row).charAt(lastCol) == '\0') {
                 return new int[]{row, lastCol};
             }
