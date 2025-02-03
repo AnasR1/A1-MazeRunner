@@ -140,6 +140,9 @@ public class PathFinder {
                     direction = (direction + 1) % 4;
                     break;
                 }
+                case ' ': {
+                    break;
+                }
                 default: {
                     logger.warn("Invalid instruction '" + move + "' at step " + i);
                     return false;
