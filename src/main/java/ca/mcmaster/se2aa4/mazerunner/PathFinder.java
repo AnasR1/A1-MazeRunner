@@ -107,4 +107,55 @@ public class PathFinder {
         factored_path.append(counter).append(path.charAt(path.length()-1));
         return factored_path.toString();
     }
+
+    protected boolean pathValid(String path, int[] entrance, int[] exit) {
+        int currRow = entrance[0];
+        int currCol = entrance[1];
+        int direction = 1;
+
+        logger.info("Executing path validator");
+        logger.info("Entrance: Row " + currRow + " Col " + currCol);
+        logger.info("Exit: Row " + exit[0] + " Col " + exit[1]);
+
+        for (int i = 0; i < path.length(); i++) {
+            char move = path.charAt(i);
+            switch (move) {
+                case 'F': {
+                    int newRow = currRow + DIRECTIONS[direction][0];
+                    int newCol = currCol + DIRECTIONS[direction][1];
+                    if (!canMove(newRow, newCol)) {
+                        logger.warn("Invalid move at step " + i + ": cannot move forward from ("
+                                + currRow + ", " + currCol + ")");
+                        return false;
+                    }
+                    currRow = newRow;
+                    currCol = newCol;
+                    break;
+                }
+                case 'L': {
+                    direction = (direction + 3) % 4;
+                    break;
+                }
+                case 'R': {
+                    direction = (direction + 1) % 4;
+                    break;
+                }
+                default: {
+                    logger.warn("Invalid instruction '" + move + "' at step " + i);
+                    return false;
+                }
+            }
+            logger.info("Step " + i + " executed. New position: (" + currRow + ", " + currCol
+                    + "), direction: " + direction);
+        }
+
+        if (currRow == exit[0] && currCol == exit[1]) {
+            logger.info("Path validation succeeded: reached exit at (" + currRow + ", " + currCol + ")");
+            return true;
+        } else {
+            logger.warn("Path ended at (" + currRow + ", " + currCol +
+                    ") which does not match exit (" + exit[0] + ", " + exit[1] + ")");
+            return false;
+        }
+    }
 }

@@ -2,8 +2,6 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,32 +21,31 @@ public class Main {
 
         CommandLineParser parser = new DefaultParser();
         String mazeFile = null;
+        String inputPath = null;
 
         try {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("i")) {
-                if (cmd.hasOption("p")){
-                    String path = cmd.getOptionValue("p");
-                }
-                else{
-                    mazeFile = cmd.getOptionValue("i");
-                }
+                mazeFile = cmd.getOptionValue("i");
             } else {
-                logger.error("No -i flag detected");
+                System.out.println("No -i flag detected");
                 System.exit(1);
+            }
+            if (cmd.hasOption("p")){
+                inputPath = cmd.getOptionValue("p");
             }
         } catch (ParseException e) {
             logger.error("Error parsing command-line arguments", e);
             System.exit(1);
         }
 
-        logger.info("** Starting Maze Runner");
+        System.out.println("** Starting Maze Runner");
         List<String> maze = new ArrayList<>();
         MazeBoard mazeBoard = new MazeBoard(maze);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(mazeFile))) {
-            logger.info("**** Reading the maze from file " + mazeFile);
+            System.out.println("**** Reading the maze from file " + mazeFile);
             String line;
             while ((line = reader.readLine()) != null) {
                 mazeBoard.extendBoard(line);
@@ -58,30 +55,39 @@ public class Main {
             System.exit(1);
         }
 
-        logger.info("**** Maze Layout:");
+        System.out.println("**** Maze Layout:");
         for (String line : mazeBoard.maze) {
-            logger.info(line);
+            System.out.println(line);
         }
 
-        logger.info("**** Computing path");
+        System.out.println("**** Computing path");
         int[] entrance = mazeBoard.findEntrance();
         int[] exit = mazeBoard.findExit();
 
         if (entrance[0] == -1 || exit[0] == -1) {
-            logger.error("Entrance or exit not found in the maze.");
+            System.out.println("Entrance or exit not found in the maze.");
             System.exit(1);
         }
 
-        logger.info("Entrance found at: Row " + entrance[0] + ", Column " + entrance[1]);
-        logger.info("Exit found at: Row " + exit[0] + ", Column " + exit[1]);
+        System.out.println("Entrance found at: Row " + entrance[0] + ", Column " + entrance[1]);
+        System.out.println("Exit found at: Row " + exit[0] + ", Column " + exit[1]);
 
         PathFinder pathFinder = new PathFinder(mazeBoard);
 
         String path = pathFinder.Pathfinder(entrance, exit);
         String factoredPath = pathFinder.factoredFormPath(path);
-        logger.info("Path: " + path);
-        logger.info("Factored Form Path: " + factoredPath);
+        System.out.println("Path: " + path);
+        System.out.println("Factored Form Path: " + factoredPath);
 
-        logger.info("** End of MazeRunner");
+        if (inputPath != null) {
+            System.out.println("Validating Input path: " + inputPath);
+            boolean isValid = pathFinder.pathValid(inputPath, entrance, exit);
+            if (isValid) {
+                System.out.println("The provided path is valid!");
+            } else {
+                System.out.println("The provided path is invalid!");
+            }
+        }
+        System.out.println("** End of MazeRunner");
     }
 }
