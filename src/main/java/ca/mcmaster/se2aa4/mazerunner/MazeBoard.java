@@ -21,13 +21,6 @@ abstract class Game {
 public class MazeBoard extends Game {
     private static final Logger logger = LogManager.getLogger();
 
-    private static final int[][] DIRECTIONS = {
-            {-1, 0}, // North
-            {0, 1},  // East
-            {1, 0},  // South
-            {0, -1}  // West
-    };
-
     public MazeBoard(List<String> maze) {
         super(maze);
     }
@@ -56,10 +49,10 @@ public class MazeBoard extends Game {
         int lastCol = maze.getFirst().length() - 1;
 
         for (int row = 1; row < maze.size() - 1; row++) {
-            if (maze.get(row).isEmpty() || maze.get(row).length() < 1) {
+            if (maze.get(row).isEmpty() || maze.get(row).length() < 1 || maze.get(row).length() < lastCol) {
                 return new int[]{row, lastCol};
             }
-            if (maze.get(row).charAt(lastCol) == ' ' || maze.get(row).charAt(lastCol) == '\0') {
+            else if (maze.get(row).charAt(lastCol) == ' ' || maze.get(row).charAt(lastCol) == '\0') {
                 return new int[]{row, lastCol};
             }
         }

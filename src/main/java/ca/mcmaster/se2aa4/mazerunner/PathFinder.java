@@ -25,7 +25,7 @@ public class PathFinder {
     protected String Pathfinder(int[] entrance, int[] exit) {
         int currRow = entrance[0];
         int currCol = entrance[1];
-        int direction = 1; // Start facing East (right)
+        int direction = 1;
         List<String> instructions = new ArrayList<>();
 
         logger.info("Executing path finder");
@@ -84,10 +84,18 @@ public class PathFinder {
     }
 
     private boolean canMove(int row, int col) {
-        if (row < 0 || row >= mazeBoard.maze.size() || col < 0 || col >= mazeBoard.maze.get(row).length()) {
+        if (row < 0 || row >= mazeBoard.maze.size()) {
             return false;
         }
-        return (mazeBoard.maze.get(row).charAt(col) == ' ' || mazeBoard.maze.get(row).isEmpty());
+        if (col < 0) {
+            return false;
+        }
+        String line = mazeBoard.maze.get(row);
+        if (col >= line.length()) {
+            return true;
+        }
+        char cell = line.charAt(col);
+        return (cell == ' ' || cell == '\0');
     }
 
     protected String factoredFormPath(String path){
@@ -124,8 +132,7 @@ public class PathFinder {
                     int newRow = currRow + DIRECTIONS[direction][0];
                     int newCol = currCol + DIRECTIONS[direction][1];
                     if (!canMove(newRow, newCol)) {
-                        logger.warn("Invalid move at step " + i + ": cannot move forward from ("
-                                + currRow + ", " + currCol + ")");
+                        logger.warn("Invalid move at step " + i + ": cannot move forward from (" + currRow + ", " + currCol + ")");
                         return false;
                     }
                     currRow = newRow;
@@ -148,16 +155,14 @@ public class PathFinder {
                     return false;
                 }
             }
-            logger.info("Step " + i + " executed. New position: (" + currRow + ", " + currCol
-                    + "), direction: " + direction);
+            logger.info("Step " + i + " executed. New position: (" + currRow + ", " + currCol + "), direction: " + direction);
         }
 
         if (currRow == exit[0] && currCol == exit[1]) {
             logger.info("Path validation succeeded: reached exit at (" + currRow + ", " + currCol + ")");
             return true;
         } else {
-            logger.warn("Path ended at (" + currRow + ", " + currCol +
-                    ") which does not match exit (" + exit[0] + ", " + exit[1] + ")");
+            logger.warn("Path ended at (" + currRow + ", " + currCol + ") which does not match exit (" + exit[0] + ", " + exit[1] + ")");
             return false;
         }
     }
