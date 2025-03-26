@@ -1,10 +1,5 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,19 +36,8 @@ public class Main {
         }
 
         System.out.println("** Starting Maze Runner");
-        List<String> maze = new ArrayList<>();
-        MazeBoard mazeBoard = new MazeBoard(maze);
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(mazeFile))) {
-            System.out.println("**** Reading the maze from file " + mazeFile);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                mazeBoard.extendBoard(line);
-            }
-        } catch (Exception e) {
-            logger.error("Error reading file: ");
-            System.exit(1);
-        }
+        MazeBoardFactory factory = new MazeBoardFactory();
+        MazeBoard mazeBoard = factory.createMazeBoard(mazeFile);
 
         System.out.println("**** Maze Layout:");
         for (String line : mazeBoard.maze) {
@@ -72,9 +56,10 @@ public class Main {
         System.out.println("Entrance found at: Row " + entrance[0] + ", Column " + entrance[1]);
         System.out.println("Exit found at: Row " + exit[0] + ", Column " + exit[1]);
 
-        PathFinder pathFinder = new PathFinder(mazeBoard);
+        PathfinderStrategy strategy = new RightHandRuleStrategy();
+        PathFinder pathFinder = new PathFinder(mazeBoard, strategy);
 
-        String path = pathFinder.Pathfinder(entrance, exit);
+        String path = pathFinder.findPath(entrance, exit);
         String factoredPath = pathFinder.factoredFormPath(path);
         System.out.println("Path: " + path);
         System.out.println("Factored Form Path: " + factoredPath);

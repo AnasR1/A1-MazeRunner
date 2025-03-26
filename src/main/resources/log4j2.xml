@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF">
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    
     <Loggers>
-        <Root level="off">
-            <AppenderRef ref="NullAppender"/>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="org.apache" level="off" additivity="false">
-            <AppenderRef ref="NullAppender"/>
+        <Logger name="org.apache" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
-    <Appenders>
-        <Null name="NullAppender"/>
-    </Appenders>
 </Configuration>
