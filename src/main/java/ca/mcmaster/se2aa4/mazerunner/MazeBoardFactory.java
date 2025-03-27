@@ -22,7 +22,7 @@ public class MazeBoardFactory {
             }
         } catch (Exception e) {
             logger.error("Error reading maze file: " + filePath, e);
-            System.exit(1);
+            throw new RuntimeException("Error reading maze file: " + filePath, e);
         }
 
         return new MazeBoard(maze);

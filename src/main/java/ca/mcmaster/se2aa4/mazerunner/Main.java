@@ -32,7 +32,7 @@ public class Main {
             }
         } catch (ParseException e) {
             logger.error("Error parsing command-line arguments", e);
-            System.exit(1);
+            throw new RuntimeException("Error reading maze file: " + inputPath, e);
         }
 
         System.out.println("** Starting Maze Runner");

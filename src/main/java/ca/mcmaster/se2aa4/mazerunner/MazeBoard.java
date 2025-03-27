@@ -1,36 +1,32 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 abstract class Game {
-    protected List<String> maze;
+    public List<String> maze;
 
     public Game(List<String> maze) {
         this.maze = maze;
     }
 
-    abstract void extendBoard(String line);
-    abstract int[] findEntrance();
-    abstract int[] findExit();
+    public abstract void extendBoard(String line);
+    public abstract int[] findEntrance();
+    public abstract int[] findExit();
 }
 
 public class MazeBoard extends Game {
-    private static final Logger logger = LogManager.getLogger();
 
     public MazeBoard(List<String> maze) {
         super(maze);
     }
 
     @Override
-    void extendBoard(String line) {
+    public void extendBoard(String line) {
         maze.add(line);
     }
 
     @Override
-    int[] findEntrance() {
+    public int[] findEntrance() {
 
         for (int row = 1; row < maze.size() - 1; row++) {
             if (maze.get(row).isEmpty() || maze.get(row).length() < 1) {
@@ -44,7 +40,7 @@ public class MazeBoard extends Game {
     }
 
     @Override
-    int[] findExit() {
+    public int[] findExit() {
         int lastCol = maze.getFirst().length() - 1;
 
         for (int row = 1; row < maze.size() - 1; row++) {

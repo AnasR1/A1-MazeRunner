@@ -44,6 +44,10 @@ public class PathFinder{
         return factored_path.toString();
     }
 
+    public String getFactoredFormPath(String path){
+        return factoredFormPath(getFactoredFormPath(path));
+    }
+
     //NEEDS To be updated to accept factored form paths currently only works with full paths
     protected boolean pathValid(String path, int[] entrance, int[] exit) {
         int currRow = entrance[0];
@@ -94,6 +98,10 @@ public class PathFinder{
             logger.warn("Path ended at (" + currRow + ", " + currCol + ") which does not match exit (" + exit[0] + ", " + exit[1] + ")");
             return false;
         }
+    }
+
+    public boolean getPathValid(String path, int[] entrance, int[] exit){
+        return pathValid(path, entrance, exit);
     }
 
     private boolean canMove(int row, int col) {
