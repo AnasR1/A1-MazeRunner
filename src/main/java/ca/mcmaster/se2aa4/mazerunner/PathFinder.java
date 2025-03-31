@@ -45,10 +45,9 @@ public class PathFinder{
     }
 
     public String getFactoredFormPath(String path){
-        return factoredFormPath(getFactoredFormPath(path));
+        return factoredFormPath(path);
     }
 
-    //NEEDS To be updated to accept factored form paths currently only works with full paths
     protected boolean pathValid(String path, int[] entrance, int[] exit) {
         int currRow = entrance[0];
         int currCol = entrance[1];
@@ -58,37 +57,54 @@ public class PathFinder{
         logger.info("Entrance: Row " + currRow + " Col " + currCol);
         logger.info("Exit: Row " + exit[0] + " Col " + exit[1]);
 
-        for (int i = 0; i < path.length(); i++) {
+        int i = 0;
+        while (i < path.length()) {
+            StringBuilder countStr = new StringBuilder();
+            while (i < path.length() && Character.isDigit(path.charAt(i))) {
+                countStr.append(path.charAt(i));
+                i++;
+            }
+            
+            if (i >= path.length()) {
+                logger.warn("Invalid path format: ended with a number without an instruction");
+                return false;
+            }
+            
             char move = path.charAt(i);
-            switch (move) {
-                case 'F': {
-                    int newRow = currRow + DIRECTIONS[direction][0];
-                    int newCol = currCol + DIRECTIONS[direction][1];
-                    if (!canMove(newRow, newCol)) {
-                        logger.warn("Invalid move at step " + i + ": cannot move forward from (" + currRow + ", " + currCol + ")");
+            i++;        
+            int repeatCount = countStr.length() > 0 ? Integer.parseInt(countStr.toString()) : 1;
+            
+            for (int j = 0; j < repeatCount; j++) {
+                switch (move) {
+                    case 'F': {
+                        int newRow = currRow + DIRECTIONS[direction][0];
+                        int newCol = currCol + DIRECTIONS[direction][1];
+                        if (!canMove(newRow, newCol)) {
+                            logger.warn("Invalid move: cannot move forward from (" + currRow + ", " + currCol + ")");
+                            return false;
+                        }
+                        currRow = newRow;
+                        currCol = newCol;
+                        break;
+                    }
+                    case 'L': {
+                        direction = (direction + 3) % 4;
+                        break;
+                    }
+                    case 'R': {
+                        direction = (direction + 1) % 4;
+                        break;
+                    }
+                    case ' ': {
+                        break;
+                    }
+                    default: {
+                        logger.warn("Invalid instruction '" + move + "'");
                         return false;
                     }
-                    currRow = newRow;
-                    currCol = newCol;
-                    break;
                 }
-                case 'L': {
-                    direction = (direction + 3) % 4;
-                    break;
-                }
-                case 'R': {
-                    direction = (direction + 1) % 4;
-                    break;
-                }
-                case ' ': {
-                    break;
-                }
-                default: {
-                    logger.warn("Invalid instruction '" + move + "' at step " + i);
-                    return false;
-                }
+                logger.info("Instruction '" + move + "' executed. New position: (" + currRow + ", " + currCol + "), direction: " + direction);
             }
-            logger.info("Step " + i + " executed. New position: (" + currRow + ", " + currCol + "), direction: " + direction);
         }
 
         if (currRow == exit[0] && currCol == exit[1]) {
@@ -99,7 +115,6 @@ public class PathFinder{
             return false;
         }
     }
-
     public boolean getPathValid(String path, int[] entrance, int[] exit){
         return pathValid(path, entrance, exit);
     }
